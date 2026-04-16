@@ -1,4 +1,4 @@
-# Ứng Dụng Đánh Giá Sức Khỏe Tâm Lý
+# Ứng Dụng Đánh Giá Và Hỗ Trợ Sức Khỏe Tâm Lý
 
 Đây là đồ án tốt nghiệp chuyên ngành Công nghệ Phần mềm. Ứng dụng di động giúp người dùng tự đánh giá mức độ sức khỏe tâm lý thông qua các thang đo chuẩn y khoa, đồng thời cung cấp công cụ theo dõi cảm xúc và gợi ý phác đồ hỗ trợ phù hợp.
 

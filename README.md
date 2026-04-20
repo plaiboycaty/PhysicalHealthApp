@@ -4,7 +4,7 @@
 
 ## 👨‍💻 Sinh viên thực hiện
 * **Họ và tên:** Trần Minh Quân
-* **Ngành học:** Công nghệ Phần mềm
+* **Ngành học:** Kỹ thuật phần mềm
 
 ## 🛠 Công nghệ sử dụng
 Hệ thống được xây dựng theo mô hình Client - Server:

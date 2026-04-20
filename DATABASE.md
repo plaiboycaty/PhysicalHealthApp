@@ -5,19 +5,27 @@ Hệ thống sử dụng Cơ sở dữ liệu quan hệ (Relational Database) ba
 ## 🗄️ Danh sách các bảng (Tables)
 
 ### Nhóm 1: Quản lý Người dùng & Cảm xúc
-* **`users`**: Lưu thông tin định danh của người dùng (ID, email, password_hash, ngày sinh, giới tính).
-* **`emotions`**: Lưu danh mục các biểu tượng cảm xúc để chuẩn hóa dữ liệu thống kê (ID, tên cảm xúc, URL icon).
-* **`diaries`**: Lưu trữ các bài viết nhật ký hằng ngày (Khóa ngoại trỏ về `users` và `emotions`).
+* **`users`**: Lưu thông tin định danh của người dùng 
+(id(Khóa chính), email, password_hash, full_name, gender, dob (ngày sinh), avatar_url, created_at).
+* **`emotions`**: Lưu danh mục các biểu tượng cảm xúc để chuẩn hóa dữ liệu thống kê 
+(id(Khóa chính), name, icon_url).
+* **`diaries`**: Lưu trữ các bài viết nhật ký hằng ngày 
+(id(Khóa chính), user_id(Khóa ngoại trỏ về `users`), emotion_id(Khóa ngoại trỏ về `emotions`),title, content, created_at).
 
 ### Nhóm 2: Quản lý Bài Test (Dynamic Tests)
 Thiết kế lưu trữ câu hỏi và đáp án độc lập giúp hệ thống linh hoạt mở rộng các bài test (ZUNG, BECK, YOUNG) mà không cần sửa code.
-* **`tests`**: Lưu thông tin chung của bộ test (Tên bộ test, mô tả).
-* **`questions`**: Lưu nội dung từng câu hỏi (Khóa ngoại trỏ về `tests`).
-* **`options`**: Lưu các lựa chọn đáp án và điểm số tương ứng. Thiết kế này giải quyết triệt để vấn đề "tính điểm ngược" hoặc "điểm nhảy cóc" của các thang đo y khoa.
+* **`tests`**: Lưu thông tin chung của bộ test 
+(id(Khóa chính), name, description, created_at).
+* **`questions`**: Lưu nội dung từng câu hỏi 
+(id(Khóa chính), test_id(Khóa ngoại trỏ về `tests`), content, question_order (số thứ tự câu hỏi)).
+* **`options`**: Lưu các lựa chọn đáp án và điểm số tương ứng. Thiết kế này giải quyết triệt để vấn đề "tính điểm ngược" hoặc "điểm nhảy cóc" của các thang đo y khoa. 
+(id(Khóa chính), question_id(Khóa ngoại trỏ về `questions`), content (nội dung đáp án), score (điểm số tương ứng với đáp án)).
 
 ### Nhóm 3: Lưu trữ Kết quả & Phác đồ
 * **`test_results`**: Lưu lịch sử làm bài (Tổng điểm, Phân loại mức độ), phục vụ vẽ biểu đồ tiến triển.
+(id (Khóa chính), user_id (Khóa ngoại trỏ về `users`), test_id (Khóa ngoại trỏ về `tests`), total_score, category, created_at).
 * **`treatments`**: Lưu trữ các lộ trình hỗ trợ theo từng tuần, được ánh xạ (map) với kết quả phân loại của người dùng.
+(id (Khóa chính), category (Mức độ bệnh để map với test_results), week_number, title (Tiêu đề tuần), content(Nội dung, Task))
 
 ## 🔗 Mối quan hệ (Relationships)
 * `users` (1) --- (N) `diaries`
@@ -25,4 +33,3 @@ Thiết kế lưu trữ câu hỏi và đáp án độc lập giúp hệ thống
 * `tests` (1) --- (N) `questions`
 * `questions` (1) --- (N) `options`
 * `emotions` (1) --- (N) `diaries`
-

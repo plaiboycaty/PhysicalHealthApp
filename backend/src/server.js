@@ -13,11 +13,14 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 const authRoutes = require('./routes/authRoutes');
+const diaryRoutes = require('./routes/diaryRoutes');
+
 app.use('/api/auth', authRoutes);
+app.use('/api', diaryRoutes);
 
 // Định tuyến cơ bản (Test)
 app.get('/', (req, res) => {
-    res.json({ message: 'Chào mừng đến với Backend API của Ứng dụng Sức Khỏe Tâm Lý' });
+  res.json({ message: 'Chào mừng đến với Backend API của Ứng dụng Sức Khỏe Tâm Lý' });
 });
 
 // Error handling middleware cơ bản
@@ -28,5 +31,5 @@ app.use((err, req, res, next) => {
 
 // Start server
 app.listen(PORT, () => {
-    console.log(`🚀 Server đang chạy tại http://localhost:${PORT}`);
+  console.log(`🚀 Server đang chạy tại http://localhost:${PORT}`);
 });

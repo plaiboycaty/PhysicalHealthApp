@@ -10,7 +10,7 @@ Hệ thống sử dụng Cơ sở dữ liệu quan hệ (Relational Database) ba
 * **`emotions`**: Lưu danh mục các biểu tượng cảm xúc để chuẩn hóa dữ liệu thống kê 
 (id(Khóa chính), name, icon_url).
 * **`diaries`**: Lưu trữ các bài viết nhật ký hằng ngày 
-(id(Khóa chính), user_id(Khóa ngoại trỏ về `users`), emotion_id(Khóa ngoại trỏ về `emotions`),title, content, created_at).
+(id(Khóa chính), user_id(Khóa ngoại trỏ về `users`), emotion_id(Khóa ngoại trỏ về `emotions`),title, content, image_url, created_at).
 
 ### Nhóm 2: Quản lý Bài Test (Dynamic Tests)
 Thiết kế lưu trữ câu hỏi và đáp án độc lập giúp hệ thống linh hoạt mở rộng các bài test (ZUNG, BECK, YOUNG) mà không cần sửa code.

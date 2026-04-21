@@ -1,4 +1,4 @@
-# 📱 Ứng Dụng Đánh Giá Sức Khỏe Tâm Lý - Frontend (Mobile App)
+# 📱 Ứng Dụng Đánh Giá Và Hỗ Trợ Sức Khỏe Tâm Lý - Frontend (Mobile App)
 
 Dự án này là phần Frontend của hệ thống đánh giá sức khỏe tâm lý, được xây dựng hoàn toàn bằng hệ sinh thái **React Native & Expo**. Mục tiêu kiến trúc là đảm bảo mã nguồn "sạch" (clean code), dễ bảo trì, tối ưu hóa cho TypeScript và bám sát các tiêu chuẩn của một dự án Production thực tế.
 

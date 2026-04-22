@@ -8,9 +8,22 @@ const authController = {
     try {
       const { full_name, email, password, gender, dob } = req.body;
 
-      // 1. Kiểm tra đầu vào cơ bản
+      // 1. Kiểm tra đầu vào cơ bản & Định dạng (Regex)
       if (!full_name || !email || !password) {
         return res.status(400).json({ message: 'Vui lòng điền đầy đủ: full_name, email, password' });
+      }
+
+      if (full_name.trim().length < 2) {
+        return res.status(400).json({ message: 'Họ tên phải chứa ít nhất 2 ký tự!' });
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        return res.status(400).json({ message: 'Định dạng email không hợp lệ!' });
+      }
+
+      if (password.length < 6) {
+        return res.status(400).json({ message: 'Mật khẩu phải chứa ít nhất 6 ký tự!' });
       }
 
       // 2. Kiểm tra email đã có người đăng ký chưa?
@@ -48,6 +61,11 @@ const authController = {
 
       if (!email || !password) {
         return res.status(400).json({ message: 'Vui lòng cung cấp email và password' });
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        return res.status(400).json({ message: 'Định dạng email không hợp lệ!' });
       }
 
       // 1. Tìm user trong DB theo email

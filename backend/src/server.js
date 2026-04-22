@@ -14,9 +14,11 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 const authRoutes = require('./routes/authRoutes');
 const diaryRoutes = require('./routes/diaryRoutes');
+const testRoutes = require('./routes/testRoutes');
 
 app.use('/api/auth', authRoutes);
 app.use('/api', diaryRoutes);
+app.use('/api/tests', testRoutes);
 
 // Định tuyến cơ bản (Test)
 app.get('/', (req, res) => {

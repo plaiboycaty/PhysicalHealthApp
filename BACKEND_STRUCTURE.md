@@ -7,7 +7,7 @@ Backend được xây dựng bằng Node.js & Express.js, tuân thủ nghiêm ng
 backend/
 ├── src/
 │   ├── config/             # Cấu hình kết nối MySQL và các biến môi trường
-│   ├── controllers/        # "Bộ não" xử lý logic nghiệp vụ (Auth, Test, Diary)
+│   ├── controllers/        # Xử lý logic nghiệp vụ (Auth, Test, Diary)
 │   ├── models/             # Chứa các câu truy vấn SQL tương tác trực tiếp với Database
 │   ├── routes/             # Định tuyến các API endpoints
 │   ├── middlewares/        # Các lớp bảo vệ (Kiểm tra JWT, Validation dữ liệu)

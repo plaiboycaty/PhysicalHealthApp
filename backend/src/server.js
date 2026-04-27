@@ -15,12 +15,13 @@ app.use(express.urlencoded({ extended: true }));
 const authRoutes = require('./routes/authRoutes');
 const diaryRoutes = require('./routes/diaryRoutes');
 const testRoutes = require('./routes/testRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 app.use('/api/auth', authRoutes);
 app.use('/api', diaryRoutes);
 app.use('/api/tests', testRoutes);
+app.use('/api/users', userRoutes);
 
-// Định tuyến cơ bản (Test)
 app.get('/', (req, res) => {
   res.json({ message: 'Chào mừng đến với Backend API của Ứng dụng Sức Khỏe Tâm Lý' });
 });

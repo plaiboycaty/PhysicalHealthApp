@@ -40,7 +40,7 @@ const testController = {
       // Chuyển cái bộ chứa (Map) về lại thành Mảng (Array) chuẩn JSON
       const questionsArray = Object.values(questionsMap);
 
-      // 4. Trả về kết quả hoành tráng cho Client
+      // 4. Trả về kết quả cho Client
       res.status(200).json({
         message: 'Lấy dữ liệu bài test thành công',
         test: {

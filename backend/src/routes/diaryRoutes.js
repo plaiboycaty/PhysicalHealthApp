@@ -10,7 +10,7 @@ router.get('/emotions', diaryController.getEmotions);
 router.get('/diaries', authMiddleware, diaryController.getMyDiaries);
 router.post('/diaries', authMiddleware, diaryController.addDiary);
 
-// Hành động nhắm vào một bài cụ thể dựa vào ID trên URL
+// API Update và Delete
 router.put('/diaries/:id', authMiddleware, diaryController.editDiary);
 router.delete('/diaries/:id', authMiddleware, diaryController.removeDiary);
 

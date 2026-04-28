@@ -30,6 +30,16 @@ const userModel = {
       [newPasswordHash, userId]
     );
     return result.affectedRows;
+  },
+
+  // Cập nhật thông tin hồ sơ
+  updateProfile: async (userId, profileData) => {
+    const { full_name, gender, dob, avatar_url } = profileData;
+    const [result] = await db.query(
+      'UPDATE users SET full_name = ?, gender = ?, dob = ?, avatar_url = ? WHERE id = ?',
+      [full_name, gender, dob, avatar_url, userId]
+    );
+    return result.affectedRows;
   }
 };
 

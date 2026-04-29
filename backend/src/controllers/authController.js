@@ -9,8 +9,8 @@ const authController = {
       const { full_name, email, password, gender, dob } = req.body;
 
       // 1. Kiểm tra đầu vào cơ bản & Định dạng (Regex)
-      if (!full_name || !email || !password) {
-        return res.status(400).json({ message: 'Vui lòng điền đầy đủ: full_name, email, password' });
+      if (!full_name || !email || !password || !gender || !dob) {
+        return res.status(400).json({ message: 'Vui lòng điền đầy đủ thông tin: họ tên, email, mật khẩu, giới tính và ngày sinh' });
       }
 
       if (full_name.trim().length < 2) {

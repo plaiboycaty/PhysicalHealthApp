@@ -16,11 +16,13 @@ const authRoutes = require('./routes/authRoutes');
 const diaryRoutes = require('./routes/diaryRoutes');
 const testRoutes = require('./routes/testRoutes');
 const userRoutes = require('./routes/userRoutes');
+const statisticRoutes = require('./routes/statisticRoutes');
 
 app.use('/api/auth', authRoutes);
 app.use('/api', diaryRoutes);
 app.use('/api/tests', testRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/statistics', statisticRoutes); // Thống kê biểu đồ
 
 app.get('/', (req, res) => {
   res.json({ message: 'Chào mừng đến với Backend API của Ứng dụng Sức Khỏe Tâm Lý' });

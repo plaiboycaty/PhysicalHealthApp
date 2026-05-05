@@ -103,6 +103,47 @@ const testController = {
     } catch (error) {
       next(error);
     }
+  },
+
+  // POST /api/tests/emergency-email
+  sendEmergencyEmail: async (req, res, next) => {
+    try {
+      // 1. Lấy thông tin bệnh nhân từ Database để đảm bảo chính xác 100%
+      const userId = req.user.user_id;
+      const userModel = require('../models/userModel');
+      const userInfo = await userModel.getUserById(userId);
+      
+      const userEmail = userInfo.email;
+      const userName = userInfo.full_name || 'Một bệnh nhân';
+
+      // 2. Lấy điểm số từ Body (Frontend gửi lên điểm số hoặc kết quả bài test gần nhất)
+      const { category, score } = req.body;
+
+      if (!category) {
+        return res.status(400).json({ message: 'Vui lòng cung cấp tình trạng bệnh (category)' });
+      }
+
+      // 3. Chuẩn bị nội dung Email
+      const doctorEmail = 'mquan8912@gmail.com'; // Email của Bệnh viện/Bác sĩ tiếp nhận
+      const subject = `[CẤP CỨU] Yêu cầu hỗ trợ y tế khẩn cấp từ bệnh nhân ${userName}`;
+      const content = `Chào Bác sĩ,\n\nBệnh nhân ${userName} (Email liên hệ: ${userEmail}) vừa thực hiện bài đánh giá tâm lý trên hệ thống và ghi nhận kết quả ở mức báo động.\n\n- Loại bệnh chẩn đoán: ${category}
+      \n- Điểm số: ${score || 'Không xác định'}\n
+      \nKính mong Bệnh viện/Bác sĩ ưu tiên liên hệ và hỗ trợ bệnh nhân này trong thời gian sớm nhất.
+      \n\nTrân trọng,\nHệ thống Cảnh báo - Psychological Health App`;
+
+      // 4. Gửi Email thông qua Nodemailer
+      const mailer = require('../utils/mailer');
+      const isSent = await mailer.sendMail(doctorEmail, subject, content);
+
+      if (isSent) {
+        res.status(200).json({ message: 'Email cấp cứu đã được gửi thành công tới Bệnh viện!' });
+      } else {
+        res.status(500).json({ message: 'Lỗi hệ thống: Không thể gửi Email lúc này.' });
+      }
+
+    } catch (error) {
+      next(error);
+    }
   }
 };
 

@@ -7,4 +7,7 @@ const authMiddleware = require('../middlewares/authMiddleware');
 router.get('/:id', authMiddleware, testController.getTestDetail);
 router.post('/submit', authMiddleware, testController.submitTest);
 
+// Gửi Email khẩn cấp cho bác sĩ (Protected)
+router.post('/emergency-email', authMiddleware, testController.sendEmergencyEmail);
+
 module.exports = router;

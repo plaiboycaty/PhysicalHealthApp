@@ -77,12 +77,21 @@ const testController = {
         category = 'Chưa xác định mức độ';
       }
 
+      // XÁC ĐỊNH MỨC ĐỘ ĐIỀU TRỊ (Treatment Status)
+      let treatment_status = 'healthy';
+      if (category.includes('nhẹ') || category.includes('vừa')) {
+        treatment_status = 'treatment'; // Cần Modal Lộ trình
+      } else if (category.includes('nặng')) {
+        treatment_status = 'emergency'; // Cần Modal Cấp cứu
+      }
+
       // 3. Lưu kết quả vào bảng test_results trong MySQL
       const resultId = await testModel.saveTestResult(userId, test_id, totalScore, category);
 
-      // 4. Trả kết quả cuối cùng
+      // 4. Trả kết quả 
       res.status(201).json({
         message: 'Nộp bài test thành công',
+        treatment_status: treatment_status,
         result: {
           id: resultId,
           test_id,

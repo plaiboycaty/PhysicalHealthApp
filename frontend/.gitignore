@@ -3,6 +3,9 @@
 # dependencies
 node_modules/
 
+#API-documentation
+API_DOCUMENTATION.md
+
 # Expo
 .expo/
 dist/

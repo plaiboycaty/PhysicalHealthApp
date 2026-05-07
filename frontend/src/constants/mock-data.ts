@@ -1,0 +1,175 @@
+// ==========================================
+// 1. DỮ LIỆU ONBOARDING (Màn hình giới thiệu)
+// ==========================================
+export const MOCK_ONBOARDING = [
+  {
+    id: '1',
+    title: 'Psychological Health',
+    description: 'The Application Allows Patients And Their Doctors To Register And Save The Patient\'s Overall Health Condition To More Easily Access It In A Later Time.',
+    image: 'https://cdn-icons-png.flaticon.com/512/3203/3203071.png',
+  },
+  {
+    id: '2',
+    title: 'Kiểm Tra Tâm Lý',
+    description: 'Thực hiện các bài đánh giá tâm lý chuẩn y khoa để hiểu rõ hơn về tình trạng sức khỏe tinh thần của bản thân.',
+    image: 'https://cdn-icons-png.flaticon.com/512/3048/3048122.png',
+  },
+  {
+    id: '3',
+    title: 'Nhật Ký Cảm Xúc',
+    description: 'Ghi lại cảm xúc mỗi ngày để theo dõi sự thay đổi và nhận được lộ trình điều trị phù hợp nhất.',
+    image: 'https://cdn-icons-png.flaticon.com/512/2602/2602055.png',
+  }
+];
+
+// ==========================================
+// 2. DỮ LIỆU NHẬT KÝ & CẢM XÚC (Diaries)
+// ==========================================
+export const MOCK_EMOTIONS = [
+  { id: 1, name: 'Tuyệt vời', icon: '😄', color: '#27AE60' },
+  { id: 2, name: 'Bình thường', icon: '🙂', color: '#2F80ED' },
+  { id: 3, name: 'Mệt mỏi', icon: '😮‍💨', color: '#F2C94C' },
+  { id: 4, name: 'Buồn bã', icon: '😔', color: '#828282' },
+  { id: 5, name: 'Căng thẳng', icon: '😰', color: '#EB5757' },
+];
+
+export const MOCK_DIARIES = [
+  {
+    id: 1,
+    title: 'Một ngày năng suất',
+    content: 'Hôm nay mình đã hoàn thành được 3 task lớn, cảm thấy rất vui và nhẹ nhõm. Hy vọng ngày mai cũng sẽ như vậy.',
+    emotion_id: 1,
+    emotion_name: 'Tuyệt vời',
+    image_url: 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&w=500&q=60',
+    created_at: '2026-05-07T10:00:00Z',
+  },
+  {
+    id: 2,
+    title: 'Áp lực công việc',
+    content: 'Deadline sắp đến gần làm mình không thể tập trung. Cảm thấy đau đầu và hơi khó thở.',
+    emotion_id: 5,
+    emotion_name: 'Căng thẳng',
+    image_url: null,
+    created_at: '2026-05-06T15:30:00Z',
+  }
+];
+
+// ==========================================
+// 3. DỮ LIỆU BÀI TEST TÂM LÝ
+// ==========================================
+export const MOCK_TESTS = [
+  {
+    id: 1,
+    title: 'Thang đo Lo âu Zung (SAS)',
+    description: 'Bài kiểm tra 20 câu hỏi giúp đánh giá mức độ lo âu của bạn trong 1-2 tuần qua.',
+    question_count: 20,
+    duration: '5-10 phút'
+  },
+  {
+    id: 2,
+    title: 'Thang đo Trầm cảm Beck (BDI)',
+    description: 'Đánh giá chi tiết các triệu chứng trầm cảm và mức độ nghiêm trọng.',
+    question_count: 21,
+    duration: '10-15 phút'
+  }
+];
+
+// Chi tiết 1 bài test (Ví dụ vài câu của bài Zung)
+export const MOCK_TEST_DETAILS = {
+  id: 1,
+  title: 'Thang đo Lo âu Zung (SAS)',
+  questions: [
+    {
+      id: 101,
+      content: 'Tôi cảm thấy lo lắng và bồn chồn vô cớ',
+      options: [
+        { id: 1, content: 'Không bao giờ', score: 1 },
+        { id: 2, content: 'Đôi khi', score: 2 },
+        { id: 3, content: 'Thường xuyên', score: 3 },
+        { id: 4, content: 'Hầu như luôn luôn', score: 4 }
+      ]
+    },
+    {
+      id: 102,
+      content: 'Tôi dễ bị run rẩy tay chân',
+      options: [
+        { id: 5, content: 'Không bao giờ', score: 1 },
+        { id: 6, content: 'Đôi khi', score: 2 },
+        { id: 7, content: 'Thường xuyên', score: 3 },
+        { id: 8, content: 'Hầu như luôn luôn', score: 4 }
+      ]
+    },
+    {
+      id: 103,
+      content: 'Tôi cảm thấy tim đập nhanh hoặc đánh trống ngực',
+      options: [
+        { id: 9, content: 'Không bao giờ', score: 1 },
+        { id: 10, content: 'Đôi khi', score: 2 },
+        { id: 11, content: 'Thường xuyên', score: 3 },
+        { id: 12, content: 'Hầu như luôn luôn', score: 4 }
+      ]
+    }
+  ]
+};
+
+// ==========================================
+// 4. DỮ LIỆU LỘ TRÌNH ĐIỀU TRỊ (Roadmap)
+// ==========================================
+export const MOCK_ROADMAP = [
+  {
+    week: 1,
+    title: 'Tuần 1: Nhận thức cảm xúc',
+    status: 'completed', // completed | in-progress | locked
+    tasks: [
+      'Ghi nhật ký cảm xúc 3 ngày liên tiếp',
+      'Thực hành hít thở sâu 5 phút mỗi tối'
+    ]
+  },
+  {
+    week: 2,
+    title: 'Tuần 2: Quản lý căng thẳng',
+    status: 'in-progress',
+    tasks: [
+      'Nghe nhạc thiền 15 phút',
+      'Tập thể dục nhẹ nhàng (Yoga/Đi bộ) 2 lần'
+    ]
+  },
+  {
+    week: 3,
+    title: 'Tuần 3: Thay đổi tư duy',
+    status: 'locked',
+    tasks: [
+      'Đọc bài viết về tư duy tích cực',
+      'Viết ra 3 điều biết ơn mỗi ngày'
+    ]
+  },
+  {
+    week: 4,
+    title: 'Tuần 4: Duy trì thói quen',
+    status: 'locked',
+    tasks: [
+      'Làm lại bài Test đánh giá để so sánh',
+      'Lập kế hoạch sinh hoạt tuần tới'
+    ]
+  }
+];
+
+// ==========================================
+// 5. DỮ LIỆU THỐNG KÊ (Biểu đồ)
+// ==========================================
+// Dữ liệu cho react-native-gifted-charts (Biểu đồ đường)
+export const MOCK_STATISTICS_LINE = [
+  { value: 45, label: 'T1' },
+  { value: 50, label: 'T2' },
+  { value: 65, label: 'T3' },
+  { value: 55, label: 'T4' },
+  { value: 40, label: 'T5' },
+];
+
+// Dữ liệu cho react-native-gifted-charts (Biểu đồ tròn)
+export const MOCK_STATISTICS_PIE = [
+  { value: 40, color: '#27AE60', text: 'Vui' },
+  { value: 30, color: '#2F80ED', text: 'Bình thường' },
+  { value: 20, color: '#F2C94C', text: 'Mệt mỏi' },
+  { value: 10, color: '#EB5757', text: 'Căng thẳng' },
+];

@@ -58,18 +58,21 @@ const testController = {
   // POST /api/tests/submit
   submitTest: async (req, res, next) => {
     try {
-      const userId = req.user.user_id;
+      // 1. Kiểm tra xem là Khách hay User có tài khoản
+      const userId = req.user ? req.user.user_id : null;
+      const isGuest = !userId;
+
       const { test_id, option_ids } = req.body;
 
       if (!test_id || !option_ids || !Array.isArray(option_ids) || option_ids.length === 0) {
         return res.status(400).json({ message: 'Dữ liệu nộp bài không hợp lệ, mảng đáp án không được trống' });
       }
 
-      // 1. Đưa mảng option_ids qua Model để cộng tổng điểm
+      // 2. Đưa mảng option_ids qua Model để cộng tổng điểm
       const numericOptionIds = option_ids.map(id => parseInt(id)).filter(id => !isNaN(id));
       const totalScore = await testModel.getOptionsScore(numericOptionIds);
 
-      // 2. Chấm điểm (File utils/scoring.js) 
+      // 3. Chấm điểm (File utils/scoring.js) 
       let category = '';
       if (test_id === 1) {
         category = scoring.evaluateZungAnxiety(totalScore);
@@ -77,7 +80,7 @@ const testController = {
         category = 'Chưa xác định mức độ';
       }
 
-      // XÁC ĐỊNH MỨC ĐỘ ĐIỀU TRỊ (Treatment Status)
+      // 4. XÁC ĐỊNH MỨC ĐỘ ĐIỀU TRỊ (Treatment Status)
       let treatment_status = 'healthy';
       if (category.includes('nhẹ') || category.includes('vừa')) {
         treatment_status = 'treatment'; // Cần Modal Lộ trình
@@ -85,18 +88,22 @@ const testController = {
         treatment_status = 'emergency'; // Cần Modal Cấp cứu
       }
 
-      // 3. Lưu kết quả vào bảng test_results trong MySQL
-      const resultId = await testModel.saveTestResult(userId, test_id, totalScore, category);
+      // 5. LƯU KẾT QUẢ VÀO DATABASE (CHỈ DÀNH CHO USER ĐÃ ĐĂNG KÝ)
+      let resultId = null;
+      if (!isGuest) {
+        resultId = await testModel.saveTestResult(userId, test_id, totalScore, category);
+      }
 
-      // 4. Trả kết quả 
-      res.status(201).json({
-        message: 'Nộp bài test thành công',
+      // 6. Trả kết quả 
+      res.status(isGuest ? 200 : 201).json({
+        message: isGuest ? 'Chấm điểm thành công (Chế độ Khách)' : 'Nộp bài test thành công',
         treatment_status: treatment_status,
         result: {
           id: resultId,
           test_id,
           total_score: totalScore,
-          category: category
+          category: category,
+          is_guest: isGuest
         }
       });
 

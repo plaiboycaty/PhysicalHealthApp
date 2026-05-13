@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const userModel = require('../models/userModel');
+const treatmentHelper = require('../utils/treatmentHelper');
 
 const userController = {
   // Lấy thông tin cá nhân (Profile)
@@ -14,6 +15,10 @@ const userController = {
 
       // Bỏ password_hash ra khỏi object trước khi gửi về Frontend
       const { password_hash, ...safeUserData } = user;
+
+      // Tính toán trạng thái lộ trình điều trị
+      const treatment_status = await treatmentHelper.getTreatmentStatus(userId);
+      safeUserData.treatment_status = treatment_status;
 
       res.status(200).json({
         message: 'Lấy thông tin cá nhân thành công',

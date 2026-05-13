@@ -10,15 +10,15 @@ interface UserProfile {
   gender: string;
   dob: string;
   avatar_url?: string;
+  treatment_status?: string;
 }
 
 interface AuthState {
   token: string | null;
   user: UserProfile | null;
   isAuthenticated: boolean;
-  isLoading: boolean; // Dùng để hiển thị splash screen trong lúc check token
-  
-  // Các hàm tương tác
+  isLoading: boolean;
+
   login: (token: string, user: UserProfile) => Promise<void>;
   logout: () => Promise<void>;
   restoreToken: () => Promise<void>;

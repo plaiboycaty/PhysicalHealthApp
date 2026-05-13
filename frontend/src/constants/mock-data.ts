@@ -4,21 +4,24 @@
 export const MOCK_ONBOARDING = [
   {
     id: '1',
-    title: 'Psychological Health',
-    description: 'The Application Allows Patients And Their Doctors To Register And Save The Patient\'s Overall Health Condition To More Easily Access It In A Later Time.',
-    image: 'https://cdn-icons-png.flaticon.com/512/3203/3203071.png',
+    title: 'Đánh Giá Tâm Lý',
+    description: 'Thực hiện các bài kiểm tra tâm lý chuẩn y khoa (ZUNG, BECK, YOUNG) để hệ thống hiểu rõ tình trạng sức khỏe tinh thần của bạn.',
+    image: require('../../assets/images/onboard/onboard1.png'),
+    color: '#2F80ED'
   },
   {
     id: '2',
-    title: 'Kiểm Tra Tâm Lý',
-    description: 'Thực hiện các bài đánh giá tâm lý chuẩn y khoa để hiểu rõ hơn về tình trạng sức khỏe tinh thần của bản thân.',
-    image: 'https://cdn-icons-png.flaticon.com/512/3048/3048122.png',
+    title: 'Lộ Trình 52Hz',
+    description: 'Nhận phác đồ điều trị 4 tuần được cá nhân hóa, giúp bạn từng bước vượt qua áp lực và tìm lại sự bình yên trong tâm hồn.',
+    image: require('../../assets/images/onboard/onboard2.png'),
+    color: '#6C5CE7'
   },
   {
     id: '3',
-    title: 'Nhật Ký Cảm Xúc',
-    description: 'Ghi lại cảm xúc mỗi ngày để theo dõi sự thay đổi và nhận được lộ trình điều trị phù hợp nhất.',
-    image: 'https://cdn-icons-png.flaticon.com/512/2602/2602055.png',
+    title: 'Nhật Ký & Cảnh Báo',
+    description: 'Ghi lại cảm xúc mỗi ngày. Tự động gửi thông báo khẩn cấp đến Bác sĩ nếu hệ thống phát hiện dấu hiệu rủi ro cao.',
+    image: require('../../assets/images/onboard/onboard3.png'),
+    color: '#FF7675'
   }
 ];
 

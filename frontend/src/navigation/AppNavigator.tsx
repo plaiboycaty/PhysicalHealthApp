@@ -1,7 +1,8 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { AppTabParamList } from '../types/navigation.types';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { useAuthStore } from '../store/auth.store';
 
 const Tab = createBottomTabNavigator<AppTabParamList>();
 
@@ -9,7 +10,23 @@ const Tab = createBottomTabNavigator<AppTabParamList>();
 const TmpScreen = ({ name }: { name: string }) => (
   <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}><Text>{name} Screen</Text></View>
 );
-const HomeScreen = () => <TmpScreen name="Trang chủ" />;
+
+const HomeScreen = () => {
+  const logout = useAuthStore((state) => state.logout);
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text style={{ fontSize: 20, marginBottom: 20 }}>Trang chủ Screen</Text>
+      {/* Nút bấm tạm thời để bạn thoát ra ngoài test màn hình Login */}
+      <TouchableOpacity 
+        onPress={logout} 
+        style={{ backgroundColor: '#FF7675', padding: 15, borderRadius: 10 }}
+      >
+        <Text style={{ color: 'white', fontWeight: 'bold' }}>Đăng xuất (Test)</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
 const DiariesScreen = () => <TmpScreen name="Nhật ký" />;
 const Roadmap52HzScreen = () => <TmpScreen name="52Hz" />;
 const TestsScreen = () => <TmpScreen name="Bài Test" />;

@@ -35,13 +35,21 @@ const testModel = {
     return Number(rows[0].total_score) || 0;
   },
 
-  // Lưu kết quả vào Database
   saveTestResult: async (userId, testId, totalScore, category) => {
     const [result] = await db.query(
       'INSERT INTO test_results (user_id, test_id, total_score, category) VALUES (?, ?, ?, ?)',
       [userId, testId, totalScore, category]
     );
     return result.insertId;
+  },
+
+  // Lấy bài test gần nhất của một User
+  getLatestTestResultByUserId: async (userId) => {
+    const [rows] = await db.query(
+      'SELECT created_at, category FROM test_results WHERE user_id = ? ORDER BY created_at DESC LIMIT 1',
+      [userId]
+    );
+    return rows[0] || null;
   }
 };
 

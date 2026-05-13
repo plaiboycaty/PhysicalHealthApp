@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const userModel = require('../models/userModel');
+const treatmentHelper = require('../utils/treatmentHelper');
 
 const authController = {
   // --- ĐĂNG KÝ TÀI KHOẢN ---
@@ -88,6 +89,9 @@ const authController = {
       // Token hợp lệ trong thời gian 7 ngày
       const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' });
 
+      // Tính toán trạng thái lộ trình điều trị
+      const treatment_status = await treatmentHelper.getTreatmentStatus(user.id);
+
       res.status(200).json({
         message: '🔓 Đăng nhập thành công',
         token: token,
@@ -95,7 +99,8 @@ const authController = {
           id: user.id,
           full_name: user.full_name,
           email: user.email,
-          avatar_url: user.avatar_url
+          avatar_url: user.avatar_url,
+          treatment_status: treatment_status
         }
       });
     } catch (error) {

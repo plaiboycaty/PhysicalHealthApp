@@ -8,7 +8,7 @@ export type AuthStackParamList = {
 export type AppTabParamList = {
   Home: undefined;
   Diaries: undefined;
-  Roadmap52Hz: undefined; // Màn hình lộ trình điều trị
+  Roadmap52Hz: undefined;
   Tests: undefined;
   Profile: undefined;
 };

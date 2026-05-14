@@ -22,7 +22,7 @@ export default function AuthNavigator() {
         AsyncStorage.setItem('alreadyLaunched', 'true');
         setIsFirstLaunch(true);
       } else {
-        setIsFirstLaunch(true);
+        setIsFirstLaunch(false);
       }
     });
   }, []);

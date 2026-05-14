@@ -18,6 +18,8 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '../../types/navigation.types';
 import { Feather } from '@expo/vector-icons';
 import { useAuthStore } from '../../store/auth.store';
+import { validateLoginForm } from '../../utils/validators';
+
 type NavigationProp = NativeStackNavigationProp<AuthStackParamList, 'Login'>;
 
 const mintColor = '#66C5BA';
@@ -27,13 +29,25 @@ export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const loginAction = useAuthStore((state) => state.login);
+  const [errors, setErrors] = useState<{email?: string, password?: string}>({});
+  const loginAction = useAuthStore((state) => state.login); // Đã mở lại store
+
   // Logic đăng nhập
   const handleLogin = () => {
-    if (!email || !password) {
-      alert('Vui lòng nhập đầy đủ email và mật khẩu!');
+    Keyboard.dismiss(); // Ẩn bàn phím khi bấm submit
+    
+    // Gọi hàm kiểm tra dùng chung
+    const newErrors = validateLoginForm(email, password);
+
+    // Nếu có lỗi thì dừng lại và hiển thị
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       return;
     }
+    
+    // Nếu không có lỗi thì xóa lỗi cũ đi
+    setErrors({});
+
     // Giả lập đăng nhập thành công
     loginAction('mock-token-123', {
       id: 1,
@@ -70,66 +84,78 @@ export default function LoginScreen() {
           {/* Thanh trạng thái để giờ và pin hiện trên nền sóng trên cùng */}
           <StatusBar barStyle="light-content" translucent backgroundColor="transparent" />
 
-          <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            style={styles.flexContainer}
-            keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
-          >
-            {/* Container chứa nội dung, đẩy xuống dưới phần sóng trên và căn giữa */}
-            <View style={styles.contentContainer}>
-              <Text style={styles.title}>Đăng nhập</Text>
-              <Text style={styles.subtitle}>Tiếp tục hành trình chữa lành của bạn</Text>
+          {Platform.OS === 'ios' ? (
+            <KeyboardAvoidingView
+              behavior="padding"
+              style={styles.flexContainer}
+              keyboardVerticalOffset={0}
+            >
+              {/* Container chứa nội dung, đẩy xuống dưới phần sóng trên và căn giữa */}
+              <View style={styles.contentContainer}>
 
-              <View style={[styles.inputWrapper, styles.shadowInput]}>
-                <Feather name="mail" size={20} color="#999" style={styles.inputIcon} />
-                <TextInput
-                  style={styles.textInput}
-                  placeholder="E-mail"
-                  placeholderTextColor="#BDBDBD"
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                  value={email}
-                  onChangeText={setEmail}
-                />
-              </View>
 
-              {/* Ô nhập Mật khẩu với Icon, Ẩn/hiện và Bóng đổ đậm */}
-              <View style={[styles.inputWrapper, styles.shadowInput]}>
-                <Feather name="lock" size={20} color="#999" style={styles.inputIcon} />
-                <TextInput
-                  style={styles.textInput}
-                  placeholder="Mật khẩu"
-                  placeholderTextColor="#BDBDBD"
-                  secureTextEntry={!passwordVisible}
-                  value={password}
-                  onChangeText={setPassword}
-                />
-                <TouchableOpacity onPress={() => setPasswordVisible(!passwordVisible)} style={styles.eyeIconWrapper}>
-                  <Feather name={passwordVisible ? "eye" : "eye-off"} size={20} color="#999" />
-                </TouchableOpacity>
-              </View>
-
-              {/* Quên mật khẩu */}
-              <TouchableOpacity style={styles.forgotPassword}>
-                <Text style={styles.forgotPasswordText}>Quên mật khẩu?</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-                <Text style={styles.loginButtonText}>Đăng nhập</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity onPress={handleGuestLogin} style={styles.guestButton}>
-                <Text style={styles.guestButtonText}>Tiếp tục dưới quyền Khách</Text>
-              </TouchableOpacity>
-              <View style={styles.registerContainer}>
-                <Text style={styles.registerText}>Không có tài khoản ? </Text>
-                <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-                  <Text style={styles.registerLink}>Đăng ký</Text>
-                </TouchableOpacity>
-              </View>
             </View>
 
-          </KeyboardAvoidingView>
+            </KeyboardAvoidingView>
+          ) : (
+            <View style={styles.flexContainer}>
+              <View style={styles.contentContainer}>
+                <Text style={styles.title}>Đăng nhập</Text>
+                <Text style={styles.subtitle}>Tiếp tục hành trình chữa lành của bạn</Text>
+  
+                {/* Ô nhập Email với Icon và Bóng đổ đậm */}
+                <View style={[styles.inputWrapper, styles.shadowInput, errors.email ? styles.inputErrorBorder : null]}>
+                  <Feather name="mail" size={20} color="#999" style={styles.inputIcon} />
+                  <TextInput
+                    style={styles.textInput}
+                    placeholder="E-mail"
+                    placeholderTextColor="#BDBDBD"
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                    value={email}
+                    onChangeText={(text) => { setEmail(text); setErrors({...errors, email: undefined}); }}
+                  />
+                </View>
+                {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
+  
+                {/* Ô nhập Mật khẩu với Icon, Ẩn/hiện và Bóng đổ đậm */}
+                <View style={[styles.inputWrapper, styles.shadowInput, errors.password ? styles.inputErrorBorder : null]}>
+                  <Feather name="lock" size={20} color="#999" style={styles.inputIcon} />
+                  <TextInput
+                    style={styles.textInput}
+                    placeholder="Mật khẩu"
+                    placeholderTextColor="#BDBDBD"
+                    secureTextEntry={!passwordVisible}
+                    value={password}
+                    onChangeText={(text) => { setPassword(text); setErrors({...errors, password: undefined}); }}
+                  />
+                  <TouchableOpacity onPress={() => setPasswordVisible(!passwordVisible)} style={styles.eyeIconWrapper}>
+                    <Feather name={passwordVisible ? "eye" : "eye-off"} size={20} color="#999" />
+                  </TouchableOpacity>
+                </View>
+                {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
+  
+                {/* Quên mật khẩu */}
+                <TouchableOpacity style={styles.forgotPassword}>
+                  <Text style={styles.forgotPasswordText}>Quên mật khẩu?</Text>
+                </TouchableOpacity>
+  
+                <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+                  <Text style={styles.loginButtonText}>Đăng nhập</Text>
+                </TouchableOpacity>
+  
+                <TouchableOpacity onPress={handleGuestLogin} style={styles.guestButton}>
+                  <Text style={styles.guestButtonText}>Tiếp tục dưới quyền Khách</Text>
+                </TouchableOpacity>
+                <View style={styles.registerContainer}>
+                  <Text style={styles.registerText}>Không có tài khoản ? </Text>
+                  <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+                    <Text style={styles.registerLink}>Đăng ký</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          )}
         </SafeAreaView>
       </ImageBackground>
     </TouchableWithoutFeedback>
@@ -175,7 +201,18 @@ const styles = StyleSheet.create({
     borderRadius: 30, // Góc rất tròn
     paddingHorizontal: 20,
     height: 60,
-    marginBottom: 25, // Khoảng cách giữa các ô nhập
+    marginBottom: 20, // Khoảng cách chuẩn
+  },
+  inputErrorBorder: {
+    borderWidth: 1,
+    borderColor: '#FF7675', // Viền đỏ khi lỗi
+  },
+  errorText: {
+    color: '#FF7675',
+    fontSize: 13,
+    marginLeft: 20,
+    marginTop: -15,
+    marginBottom: 15,
   },
   inputIcon: {
     marginRight: 10,

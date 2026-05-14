@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import {
   View, Text, StyleSheet, FlatList, Image,
-  useWindowDimensions, TouchableOpacity, NativeSyntheticEvent, NativeScrollEvent
+  Dimensions, TouchableOpacity, NativeSyntheticEvent, NativeScrollEvent
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -14,17 +14,17 @@ type NavigationProp = NativeStackNavigationProp<AuthStackParamList, 'Onboarding'
 const mintColor = '#66C5BA';
 
 export default function OnboardingScreen() {
-  const { width } = useWindowDimensions();
+  const width = Dimensions.get('window').width;
   const navigation = useNavigation<NavigationProp>();
   const [currentIndex, setCurrentIndex] = useState(0);
   const slidesRef = useRef<FlatList>(null);
 
-  // Bắt sự kiện lướt màn hình để cập nhật dấu chấm (Pagination)
-  const handleScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const scrollPosition = e.nativeEvent.contentOffset.x;
-    const index = Math.round(scrollPosition / width);
-    setCurrentIndex(index);
-  };
+  const viewabilityConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
+  const onViewableItemsChanged = useRef(({ viewableItems }: any) => {
+    if (viewableItems.length > 0) {
+      setCurrentIndex(viewableItems[0].index);
+    }
+  }).current;
 
   // Nút Skip hoặc Get Started -> Chuyển sang màn Login
   const handleSkip = () => {
@@ -41,7 +41,8 @@ export default function OnboardingScreen() {
         showsHorizontalScrollIndicator={false}
         pagingEnabled
         bounces={false}
-        onScroll={handleScroll}
+        onViewableItemsChanged={onViewableItemsChanged}
+        viewabilityConfig={viewabilityConfig}
         renderItem={({ item }) => (
           <View style={[styles.slide, { width }]}>
             {/* Background cong cong mô phỏng ảnh mẫu */}

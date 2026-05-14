@@ -122,7 +122,7 @@ export const MOCK_ROADMAP = [
   {
     week: 1,
     title: 'Tuần 1: Nhận thức cảm xúc',
-    status: 'completed', // completed | in-progress | locked
+    status: 'completed',
     tasks: [
       'Ghi nhật ký cảm xúc 3 ngày liên tiếp',
       'Thực hành hít thở sâu 5 phút mỗi tối'

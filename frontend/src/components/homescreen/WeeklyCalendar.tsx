@@ -1,0 +1,168 @@
+import React, { useState, useMemo } from 'react';
+import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { Feather } from '@expo/vector-icons';
+import { EMOTIONS } from './EmotionTracker';
+
+interface WeeklyCalendarProps {
+  todayEmotion?: any;
+}
+
+export default function WeeklyCalendar({ todayEmotion }: WeeklyCalendarProps) {
+  const [currentDate, setCurrentDate] = useState(new Date());
+
+  const { weekDates, monthTitle } = useMemo(() => {
+    const currentDay = currentDate.getDay();
+    const diffToMonday = currentDate.getDate() - currentDay + (currentDay === 0 ? -6 : 1);
+    
+    const week = [];
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), diffToMonday + i);
+      const isToday = date.toDateString() === new Date().toDateString();
+      const isFuture = date.getTime() > new Date().getTime() && !isToday;
+      
+      week.push({
+        dateNum: date.getDate(),
+        isToday,
+        isFuture,
+        // Nếu là hôm nay thì lấy icon từ prop todayEmotion, nếu là quá khứ thì random
+        mockEmotion: isToday
+          ? (todayEmotion ? todayEmotion.icon : null)
+          : (!isFuture && Math.random() > 0.3) 
+            ? EMOTIONS[Math.floor(Math.random() * EMOTIONS.length)].icon 
+            : null
+      });
+    }
+
+    const monthEng = currentDate.toLocaleString('en-US', { month: 'long' });
+    const monthVN = currentDate.getMonth() + 1;
+    
+    return {
+      weekDates: week,
+      monthTitle: `${monthEng} - Tháng ${monthVN}`
+    };
+  }, [currentDate, todayEmotion]);
+
+  const handlePrevWeek = () => {
+    setCurrentDate(prev => new Date(prev.getFullYear(), prev.getMonth(), prev.getDate() - 7));
+  };
+
+  const handleNextWeek = () => {
+    setCurrentDate(prev => new Date(prev.getFullYear(), prev.getMonth(), prev.getDate() + 7));
+  };
+
+  return (
+    <View style={styles.calendarSection}>
+      <View style={styles.calendarHeader}>
+        <Text style={styles.calendarTitle}>{monthTitle}</Text>
+        <View style={styles.calendarNav}>
+          <TouchableOpacity onPress={handlePrevWeek} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
+            <Feather name="chevron-left" size={22} color="#333" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleNextWeek} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }} style={{ marginLeft: 20 }}>
+            <Feather name="chevron-right" size={22} color="#333" />
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      <View style={styles.weekDays}>
+        {['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'].map((day, idx) => (
+          <Text key={idx} style={styles.dayText}>{day}</Text>
+        ))}
+      </View>
+
+      <View style={styles.datesRow}>
+        {weekDates.map((dayObj, idx) => (
+          <View key={idx} style={styles.dateCol}>
+            <View style={[styles.dateCircle, dayObj.isToday && styles.activeDateCircle]}>
+              <Text style={styles.dateNumText}>{dayObj.dateNum}</Text>
+            </View>
+
+            {dayObj.isFuture ? (
+              <View style={styles.emptyIconCircle} />
+            ) : (
+              dayObj.mockEmotion ? (
+                <Image source={dayObj.mockEmotion} style={styles.historyIcon} />
+              ) : (
+                <View style={styles.emptyIconCircle} />
+              )
+            )}
+          </View>
+        ))}
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  calendarSection: {
+    backgroundColor: 'white',
+    borderRadius: 24,
+    padding: 15, // Giảm padding
+    marginBottom: 15,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 5,
+  },
+  calendarHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 15, // Giảm margin
+  },
+  calendarTitle: {
+    fontSize: 15, // Thu nhỏ tiêu đề
+    fontFamily: 'Baloo2_700Bold',
+    color: '#333',
+  },
+  calendarNav: {
+    flexDirection: 'row',
+  },
+  weekDays: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  dayText: {
+    fontSize: 14, // Thu nhỏ text
+    fontFamily: 'Baloo2_700Bold',
+    color: '#000',
+    width: 30, // Thu hẹp độ rộng
+    textAlign: 'center',
+  },
+  datesRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  dateCol: {
+    alignItems: 'center',
+    width: 30,
+  },
+  dateCircle: {
+    width: 28, // Nhỏ lại
+    height: 28,
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 10,
+  },
+  activeDateCircle: {
+    backgroundColor: '#E5E5E5',
+  },
+  dateNumText: {
+    fontSize: 14,
+    fontFamily: 'Baloo2_500Medium',
+    color: '#333',
+  },
+  historyIcon: {
+    width: 24, // Nhỏ lại
+    height: 24,
+  },
+  emptyIconCircle: {
+    width: 20, // Nhỏ lại
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: '#D9D9D9',
+  },
+});

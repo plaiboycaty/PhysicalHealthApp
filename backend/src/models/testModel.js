@@ -1,6 +1,12 @@
 const db = require('../config/db');
 
 const testModel = {
+  // Lấy danh sách tất cả bài test
+  getAllTests: async () => {
+    const [rows] = await db.query('SELECT * FROM tests');
+    return rows;
+  },
+
   // Lấy thông tin miêu tả cơ bản của bài test
   getTestById: async (testId) => {
     const [rows] = await db.query('SELECT * FROM tests WHERE id = ?', [testId]);

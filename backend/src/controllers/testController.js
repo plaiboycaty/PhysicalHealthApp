@@ -2,6 +2,19 @@ const testModel = require('../models/testModel');
 const scoring = require('../utils/scoring');
 
 const testController = {
+  // GET /api/tests
+  getAllTests: async (req, res, next) => {
+    try {
+      const tests = await testModel.getAllTests();
+      res.status(200).json({
+        message: 'Lấy danh sách bài test thành công',
+        tests: tests
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
   // GET /api/tests/:id
   getTestDetail: async (req, res, next) => {
     try {

@@ -12,3 +12,9 @@ export type AppTabParamList = {
   Tests: undefined;
   Profile: undefined;
 };
+
+// Stack lồng trong Tab Profile hoặc stack chính của App
+export type AppStackParamList = {
+  MainTabs: undefined;
+  PersonalInfo: undefined;
+};

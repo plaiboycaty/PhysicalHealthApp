@@ -44,7 +44,6 @@ const TESTS = [
 
 export default function TestsScreen() {
   const handleStartTest = (testId: string) => {
-    // TODO: Điều hướng sang màn hình làm bài test cụ thể
     console.log('Bắt đầu test:', testId);
   };
 

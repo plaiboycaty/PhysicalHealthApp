@@ -1,30 +1,32 @@
 import React, { useRef, useEffect } from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { AppTabParamList } from '../types/navigation.types';
+import { AppTabParamList, AppStackParamList } from '../types/navigation.types';
 import { View, Text, TouchableOpacity, StyleSheet, Platform, Animated } from 'react-native';
 import { useAuthStore } from '../store/auth.store';
 import { Ionicons } from '@expo/vector-icons';
 import { useIsFocused } from '@react-navigation/native';
 
-// Import HomeScreen thật
 import HomeScreen from '../screens/home/HomeScreen';
-// Import TestsScreen thật
 import TestsScreen from '../screens/tests/TestsScreen';
+import ProfileScreen from '../screens/profile/ProfileScreen';
+import PersonalInfoScreen from '../screens/profile/PersonalInfoScreen';
 
 const Tab = createBottomTabNavigator<AppTabParamList>();
+const Stack = createNativeStackNavigator<AppStackParamList>();
 const mintColor = '#66C5BA';
 
-// --- HOC: Thêm hiệu ứng slide-up + fade khi chuyển tab ---
+// --- Hiệu ứng slide-up + fade khi chuyển tab ---
 function withTabTransition<T extends object>(WrappedComponent: React.ComponentType<T>) {
   return function AnimatedScreen(props: T) {
     const isFocused = useIsFocused();
-    const slideAnim = useRef(new Animated.Value(40)).current;
+    // Bắt đầu opacity = 1 để tránh màn trắng trên iOS khi animation chưa kịp chạy
+    const slideAnim = useRef(new Animated.Value(30)).current;
     const fadeAnim = useRef(new Animated.Value(0)).current;
 
     useEffect(() => {
       if (isFocused) {
-        // Reset về vị trí ban đầu rồi chạy animation
-        slideAnim.setValue(40);
+        slideAnim.setValue(30);
         fadeAnim.setValue(0);
         Animated.parallel([
           Animated.spring(slideAnim, {
@@ -35,10 +37,16 @@ function withTabTransition<T extends object>(WrappedComponent: React.ComponentTy
           }),
           Animated.timing(fadeAnim, {
             toValue: 1,
-            duration: 220,
+            // Thêm delay nhỏ để iOS kịp render component trước khi fade
+            delay: Platform.OS === 'ios' ? 50 : 0,
+            duration: 200,
             useNativeDriver: true,
           }),
         ]).start();
+      } else {
+        // Khi mất focus, reset ngay để lần sau hiệu ứng mượt
+        slideAnim.setValue(30);
+        fadeAnim.setValue(0);
       }
     }, [isFocused]);
 
@@ -57,27 +65,13 @@ function withTabTransition<T extends object>(WrappedComponent: React.ComponentTy
 }
 // --------------------------------------------------
 
-// --- UI Tạm thời (Sẽ tách file thật ở Giai đoạn sau) ---
+// --- UI Tạm thời---
 const TmpScreen = ({ name }: { name: string }) => (
   <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}><Text>{name} Screen</Text></View>
 );
 
 const DiariesScreen = () => <TmpScreen name="Nhật ký" />;
 const Roadmap52HzScreen = () => <TmpScreen name="52Hz" />;
-const ProfileScreen = () => {
-  const logout = useAuthStore((state) => state.logout);
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text style={{ fontSize: 20, marginBottom: 20 }}>Profile Screen</Text>
-      <TouchableOpacity
-        onPress={logout}
-        style={{ backgroundColor: '#FF7675', padding: 15, borderRadius: 10 }}
-      >
-        <Text style={{ color: 'white', fontWeight: 'bold' }}>Đăng xuất (Test)</Text>
-      </TouchableOpacity>
-    </View>
-  );
-};
 // ----------------------------------------------------
 
 // Wrap tất cả các màn hình với hiệu ứng slide
@@ -86,13 +80,14 @@ const AnimatedTests = withTabTransition(TestsScreen);
 const AnimatedRoadmap = withTabTransition(Roadmap52HzScreen);
 const AnimatedDiaries = withTabTransition(DiariesScreen);
 const AnimatedProfile = withTabTransition(ProfileScreen);
+const AnimatedPersonalInfo = withTabTransition(PersonalInfoScreen);
 
-export default function AppNavigator() {
+function TabNavigator() {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
-        tabBarShowLabel: true, // Hiện chữ theo đúng design
+        tabBarShowLabel: true,
         tabBarActiveTintColor: mintColor,
         tabBarInactiveTintColor: '#BDBDBD',
         tabBarLabelStyle: { fontSize: 11, fontWeight: 'bold' },
@@ -118,6 +113,15 @@ export default function AppNavigator() {
       <Tab.Screen name="Diaries" component={AnimatedDiaries} options={{ tabBarLabel: 'Diary' }} />
       <Tab.Screen name="Profile" component={AnimatedProfile} options={{ tabBarLabel: 'Profile' }} />
     </Tab.Navigator>
+  );
+}
+
+export default function AppNavigator() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="MainTabs" component={TabNavigator} />
+      <Stack.Screen name="PersonalInfo" component={AnimatedPersonalInfo} />
+    </Stack.Navigator>
   );
 }
 

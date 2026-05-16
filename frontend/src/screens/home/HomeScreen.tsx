@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   Image,
   ImageBackground,
-  StatusBar,
   Dimensions,
   Platform
 } from 'react-native';
@@ -51,8 +50,6 @@ export default function HomeScreen() {
       style={styles.backgroundImage}
       resizeMode="stretch"
     >
-      <StatusBar barStyle="dark-content" translucent backgroundColor="transparent" />
-
       <SafeAreaView style={styles.container}>
         {/* HEADER */}
         <View style={styles.headerContent}>
@@ -103,6 +100,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    backgroundColor: 'transparent', // iOS: tránh nền trắng đè lên ImageBackground
   },
   headerContent: {
     flexDirection: 'row',
